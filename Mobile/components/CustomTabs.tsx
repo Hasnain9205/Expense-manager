@@ -2,7 +2,7 @@ import React from "react";
 import { View, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import * as Icons from "phosphor-react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { colors, spacingY } from "@/constants/theme";
+import { colors } from "@/constants/theme";
 import { verticalScale } from "@/utils/styling";
 
 export default function CustomTabs({
