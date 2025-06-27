@@ -36,11 +36,9 @@ exports.getAllIncome = async (req, res) => {
     const income = await Income.find({ userId }).sort({ date: -1 });
     res.status(200).json({ message: "Get all income successfully", income });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Error get all income in server",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Error get all income in server",
+      error: error.message,
+    });
   }
 };
