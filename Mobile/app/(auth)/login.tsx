@@ -1,19 +1,10 @@
-<<<<<<< HEAD
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-=======
 import { Alert, Pressable, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
->>>>>>> 7d73703 (Added Custom Tabs)
 import ScreenWrapper from "@/components/ScreenWrapper";
 import { colors, spacingX, spacingY } from "@/constants/theme";
 import BackButton from "@/components/BackButton";
 import Typo from "@/components/Typo";
 import Input from "@/components/Input";
-<<<<<<< HEAD
-
-const Login = () => {
-=======
 import * as Icons from "phosphor-react-native";
 import { verticalScale } from "@/utils/styling";
 import Button from "@/components/Button";
@@ -34,7 +25,7 @@ const Login = () => {
   //   console.log("email", email);
   //   console.log("email", password);
   // };
->>>>>>> 7d73703 (Added Custom Tabs)
+
   return (
     <ScreenWrapper>
       <View style={styles.container}>
@@ -47,15 +38,6 @@ const Login = () => {
           <Typo size={30} fontWeight={"800"}>
             Welcome Back
           </Typo>
-<<<<<<< HEAD
-
-          <View style={styles.form}>
-            <Typo size={16} color={colors.textLight}>
-              Login now to track all your expense
-            </Typo>
-            <Input />
-          </View>
-=======
         </View>
 
         <View style={styles.form}>
@@ -106,7 +88,6 @@ const Login = () => {
               Sign up
             </Typo>
           </Pressable>
->>>>>>> 7d73703 (Added Custom Tabs)
         </View>
       </View>
     </ScreenWrapper>
@@ -125,8 +106,6 @@ const styles = StyleSheet.create({
   form: {
     gap: spacingY._20,
   },
-<<<<<<< HEAD
-=======
   footer: {
     flexDirection: "row",
     justifyContent: "center",
@@ -138,5 +117,4 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: verticalScale(15),
   },
->>>>>>> 7d73703 (Added Custom Tabs)
 });

@@ -1,25 +1,11 @@
 import { StyleSheet, TextInput, View } from "react-native";
 import React from "react";
 import { InputProps } from "@/types";
-<<<<<<< HEAD
 import { colors, radius } from "@/constants/theme";
-=======
-import { colors, spacingX, radius } from "@/constants/theme";
->>>>>>> 7d73703 (Added Custom Tabs)
 import { verticalScale } from "@/utils/styling";
 
 const Input = (props: InputProps) => {
   return (
-<<<<<<< HEAD
-    <View
-      style={(styles.container, props.containerStyle && props.containerStyle)}
-    >
-      {props.icon && props.icon}
-      <TextInput
-        style={[styles.input, props.inputStyle]}
-        placeholder={colors.neutral400}
-        ref={props.inputRef && props.inputRef}
-=======
     <View style={[styles.container, props.containerStyle]}>
       {props.icon && props.icon}
       <TextInput
@@ -29,7 +15,6 @@ const Input = (props: InputProps) => {
         placeholderTextColor={colors.neutral400}
         ref={props.inputRef}
         {...props}
->>>>>>> 7d73703 (Added Custom Tabs)
       />
     </View>
   );
@@ -47,17 +32,11 @@ const styles = StyleSheet.create({
     borderColor: colors.neutral300,
     borderRadius: radius._17,
     borderCurve: "continuous",
-<<<<<<< HEAD
-  },
-  input: {},
-=======
-    paddingHorizontal: spacingX._15,
-    gap: spacingX._10,
+    paddingHorizontal: 16,
   },
   input: {
     flex: 1,
     fontSize: verticalScale(14),
     color: colors.white,
   },
->>>>>>> 7d73703 (Added Custom Tabs)
 });

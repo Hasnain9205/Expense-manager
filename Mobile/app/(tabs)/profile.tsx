@@ -92,13 +92,14 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     alignItems: "center",
-    marginTop: verticalScale(30),
+    marginTop: verticalScale(20),
   },
   avatar: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     borderRadius: 60,
     marginBottom: spacingY._10,
+    backgroundColor: "white",
   },
   name: {
     marginBottom: 6,

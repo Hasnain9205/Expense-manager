@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
   sideTab: {
     flexDirection: "row",
-    gap: verticalScale(80),
+    gap: verticalScale(60),
   },
   tabbarItem: {
     justifyContent: "center",
