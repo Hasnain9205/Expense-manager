@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const generateOTP = require("../utils/generateOTP");
 
 //generate jwt
 const generateToken = (id) => {
@@ -51,20 +52,51 @@ exports.loginUser = async (req, res) => {
   }
   try {
     const user = await User.findOne({ email });
-    if (!email || !(await user.comparePassword(password))) {
+    if (!user || !(await user.comparePassword(password))) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
+    const otp = generateOTP();
+    user.otp = otp;
+    user.otpExpires = Date.now() + 5 * 60 * 1000; // OTP valid for 10 minutes
+    await user.save();
+    console.log(`OTP sent to ${email}: ${otp}`);
     res.status(200).json({
       success: true,
       id: user._id,
       user,
-      token: generateToken(user._id),
       message: "User login successfully",
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: "Error login user",
+      error: error.message,
+    });
+  }
+};
+
+//verify OTP
+exports.verifyOTP = async (req, res) => {
+  const { email, otp } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user || user.otp !== otp || user.otpExpires < Date.now()) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+    user.otp = null;
+    user.otpExpires = null;
+    await user.save();
+    const token = generateToken(user._id);
+    res.status(200).json({
+      success: true,
+      message: "OTP verified successfully",
+      token,
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "OTP verification failed",
       error: error.message,
     });
   }

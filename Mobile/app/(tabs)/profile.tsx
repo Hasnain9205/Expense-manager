@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Header from "@/components/Header";
@@ -7,15 +7,31 @@ import { spacingX, spacingY, colors } from "@/constants/theme";
 import { useRouter } from "expo-router";
 import { verticalScale } from "@/utils/styling";
 import * as Icons from "phosphor-react-native";
+import axios from "@/utils/axiosInstance";
+import { logout } from "@/utils/logout";
 
 const Profile = () => {
   const router = useRouter();
+  const [user, setUser] = useState({
+    fullName: "",
+    email: "",
+    profileImageUrl: "",
+  });
 
-  const user = {
-    name: "Md. Hasnain Ahmed",
-    email: "hasnain@example.com",
-    avatar: require("../../assets/images/welcome2-removebg-preview (1).png"),
-  };
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/auth/getUser");
+        setUser(res.data.user);
+      } catch (error) {
+        console.error(
+          "Failed to fetch user:",
+          error.message?.data || error.message
+        );
+      }
+    };
+    fetchUser();
+  }, []);
 
   return (
     <ScreenWrapper>
@@ -24,10 +40,17 @@ const Profile = () => {
 
         {/* Profile Info Section */}
         <View style={styles.profileContainer}>
-          <Image source={user.avatar} style={styles.avatar} />
+          <Image
+            source={
+              user.profileImageUrl
+                ? { uri: user.profileImageUrl }
+                : require("../../assets/images/splashImage.png")
+            }
+            style={styles.avatar}
+          />
 
           <Typo size={24} fontWeight="700" style={styles.name}>
-            {user.name}
+            {user.fullName}
           </Typo>
           <Typo size={16} color={colors.textLight}>
             {user.email}
@@ -64,7 +87,7 @@ const Profile = () => {
               </View>
               <Icons.CaretRight size={24} color={colors.white} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.editRow}>
+            <TouchableOpacity onPress={logout} style={styles.editRow}>
               <View style={styles.editProfile}>
                 <View style={[styles.iconBox, { backgroundColor: "red" }]}>
                   <Icons.SignOut size={24} weight="fill" color={colors.white} />

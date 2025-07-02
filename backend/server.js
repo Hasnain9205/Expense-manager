@@ -4,6 +4,7 @@ const cors = require("cors");
 const ConnectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const incomeRoutes = require("./routes/incomeRoutes");
+const expenseRoutes = require("./routes/expenseRoutes");
 
 const app = express();
 
@@ -21,6 +22,7 @@ ConnectDB();
 
 app.use("/api/auth", authRoutes);
 app.use("/api/income", incomeRoutes);
+app.use("/api/expense", expenseRoutes);
 
 app.use("/uploads", express.static("uploads"));
 
