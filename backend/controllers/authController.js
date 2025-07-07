@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const generateOTP = require("../utils/generateOTP");
+const { validatePassword } = require("../utils/validtePassword");
 
 //generate jwt
 const generateToken = (id) => {
@@ -15,16 +16,21 @@ exports.registerUser = async (req, res) => {
   if (!fullName || !email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
+  const passwordValidation = validatePassword(password);
+  if (!passwordValidation) {
+    return res.status(400).json({ message: passwordValidation.message });
+  }
   try {
+    const emailLower = email.toLowerCase();
     //check if email already exist
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: emailLower });
     if (existingUser) {
       return res.status(400).json({ message: "Email already in use" });
     }
     //create user
     const user = await User.create({
       fullName,
-      email,
+      email: emailLower,
       password,
       profileImageUrl: imageUrl,
     });
@@ -50,16 +56,21 @@ exports.loginUser = async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
+  const passwordValidation = validatePassword(password);
+  if (!passwordValidation) {
+    return res.status(400).json({ message: passwordValidation.message });
+  }
   try {
-    const user = await User.findOne({ email });
+    const emailLower = email.toLowerCase();
+    const user = await User.findOne({ email: emailLower });
     if (!user || !(await user.comparePassword(password))) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    const otp = generateOTP();
-    user.otp = otp;
-    user.otpExpires = Date.now() + 5 * 60 * 1000; // OTP valid for 10 minutes
+    const { otp, hashedOTP } = await generateOTP();
+    user.otp = hashedOTP;
+    user.otpExpires = Date.now() + 5 * 60 * 1000; //validate otp for 5 minutes
     await user.save();
-    console.log(`OTP sent to ${email}: ${otp}`);
+    console.log(`OTP sent to ${emailLower}: ${otp}`);
     res.status(200).json({
       success: true,
       id: user._id,
@@ -79,13 +90,15 @@ exports.loginUser = async (req, res) => {
 exports.verifyOTP = async (req, res) => {
   const { email, otp } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const emailLower = email.toLowerCase();
+    const user = await User.findOne({ email: emailLower });
     if (!user || user.otp !== otp || user.otpExpires < Date.now()) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }
     user.otp = null;
     user.otpExpires = null;
     await user.save();
+
     const token = generateToken(user._id);
     res.status(200).json({
       success: true,
